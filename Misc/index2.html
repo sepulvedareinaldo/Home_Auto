@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    <title>WebSockets Hello World</title>
+    
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+    
+    
+    </style>
+    <body>hello
+
+<h1>Custom Range Slider</h1>
+
+<div class="slidecontainer1">
+  <p id="redDisp">hi</p>
+  <p id="redCustom">Red Intensity:</p>
+  <input type="range" min="1" max="100" value="50" class="slider" id="redSlider">
+</div>
+
+<div class="slidecontainer2">
+  <p id="grnDisp">hi</p>
+  <p id="grnCustom">Green Intensity:</p>
+  <input type="range" min="1" max="100" value="50" class="slider" id="grnSlider">
+</div>
+
+<div class="slidecontainer3">
+  <p id="bluDisp">hi</p>
+  <p id="bluCustom">Green Intensity:</p>
+  <input type="range" min="1" max="100" value="50" class="slider" id="bluSlider">
+</div>
+
+<div class="slidecontainer4">
+  <p id="AllDisp">hi</p>
+  <p id="AllCustom">All Intensity:</p>
+  <input type="range" min="1" max="100" value="50" class="slider" id="AllSlider">
+</div>
+
+</body>
+    
+    
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script>
+ 
+      // log function
+ 
+      $(document).ready(function () {
+        $("div#message_details").hide()
+      });
+
+        var ws1;
+        
+          // create websocket instance
+          ws1 = new WebSocket("ws://192.168.0.107:8888/ws1");
+           
+          // Handle incoming websocket message callback
+          ws1.onmessage = function(evt) {
+            console.log("Message Received1: " + evt.data);
+            ws1.send('echo ' + evt.data);
+            console.log("Message Sent1: " + 'echo ' + evt.data);
+            };
+ 
+          // Close Websocket callback
+          ws1.onclose = function(evt) {
+            console.log("***Connection Closed***");
+            };
+ 
+          // Open Websocket callback
+          ws1.onopen = function(evt) { 
+            console.log("***Connection Opened First Socket***");
+          };
+          
+      
+      ////////////// RED
+      var redsldr = document.getElementById("redSlider");
+      var redout = document.getElementById("redDisp");
+      redout.innerHTML = redsldr.value; // Display the default slider value
+
+      // Update the current slider value (each time you drag the slider handle)
+      redsldr.oninput = function() {
+    	  redout.innerHTML = this.value;
+          ws1.send('livingledred:' + this.value);
+      } 
+      //////////////  GREEN
+      
+      var grnsldr = document.getElementById("grnSlider");
+      var grnout = document.getElementById("grnDisp");
+      grnout.innerHTML = grnsldr.value; // Display the default slider value
+
+      // Update the current slider value (each time you drag the slider handle)
+      grnsldr.oninput = function() {
+    	  grnout.innerHTML = this.value;
+          ws1.send('livingledgrn:' + this.value);
+      } 
+      
+      /////////////  BLUE
+      
+      var blusldr = document.getElementById("bluSlider");
+      var bluout = document.getElementById("bluDisp");
+      bluout.innerHTML = blusldr.value; // Display the default slider value
+
+      // Update the current slider value (each time you drag the slider handle)
+      blusldr.oninput = function() {
+    	  bluout.innerHTML = this.value;
+          ws1.send('livingledblu:' + this.value);
+      } 
+      
+      ///////////// ALL
+      var Allsldr = document.getElementById("AllSlider");
+      var Allout = document.getElementById("AllDisp");
+      Allout.innerHTML = Allsldr.value; // Display the default slider value
+
+      // Update the current slider value (each time you drag the slider handle)
+      Allsldr.oninput = function() {
+    	  Allout.innerHTML = this.value;
+          ws1.send('livingledcustom:' + this.value);
+      } 
+    </script>
+  </head>
+ 
+  <body>
+
+  </body>
+</html>
+
+
+
+
